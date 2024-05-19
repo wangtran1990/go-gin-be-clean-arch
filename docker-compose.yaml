@@ -1,21 +1,32 @@
 version: "3.8"
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: app
-    container_name: app
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: app
+  #   container_name: app
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   ports:
+  #     - '$PORT:$PORT'
+  #   depends_on:
+  #     - mongodb
+  #     - redis
+
+  redis:
+    image: redis
+    container_name: redis
     restart: unless-stopped
     env_file: .env
     ports:
-      - "$PORT:$PORT"
-    depends_on:
-      - mongodb
+      - '$REDIS_PORT:$REDIS_PORT'
+    volumes:
+      - redis_data:/data/cache
 
   mongodb:
-    image: mongo:6.0
+    image: mongo
     container_name: mongodb
     restart: unless-stopped
     env_file: .env
@@ -23,9 +34,10 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=$DB_USER
       - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
     ports:
-      - "$DB_PORT:$DB_PORT"
+      - '$DB_PORT:$DB_PORT'
     volumes:
-      - dbdata:/data/db
+      - mongo_data:/data/db
 
 volumes:
-  dbdata:
+  mongo_data:
+  redis_data:

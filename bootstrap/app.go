@@ -1,19 +1,25 @@
 package bootstrap
 
-import "github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
+import (
+	"go-gin-be-clean-arch/mongo"
+	"go-gin-be-clean-arch/redis"
+)
 
 type Application struct {
 	Env   *Env
 	Mongo mongo.Client
+	Redis redis.Client
 }
 
 func App() Application {
 	app := &Application{}
 	app.Env = NewEnv()
+	app.Redis = NewRedisCache(app.Env)
 	app.Mongo = NewMongoDatabase(app.Env)
 	return *app
 }
 
-func (app *Application) CloseDBConnection() {
+func (app *Application) CloseAllConnection() {
 	CloseMongoDBConnection(app.Mongo)
+	CloseRedisConnection(app.Redis)
 }

@@ -3,13 +3,15 @@ package route
 import (
 	"time"
 
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/middleware"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
+	"go-gin-be-clean-arch/api/middleware"
+	"go-gin-be-clean-arch/bootstrap"
+	"go-gin-be-clean-arch/mongo"
+	"go-gin-be-clean-arch/redis"
+
 	"github.com/gin-gonic/gin"
 )
 
-func Setup(env *bootstrap.Env, timeout time.Duration, db mongo.Database, gin *gin.Engine) {
+func Setup(env *bootstrap.Env, timeout time.Duration, db mongo.Database, cache redis.Client, gin *gin.Engine) {
 	publicRouter := gin.Group("")
 	// All Public APIs
 	NewSignupRouter(env, timeout, db, publicRouter)

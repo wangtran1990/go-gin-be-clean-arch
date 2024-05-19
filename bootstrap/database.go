@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
+	"go-gin-be-clean-arch/mongo"
 )
 
 func NewMongoDatabase(env *Env) mongo.Client {
@@ -19,6 +19,7 @@ func NewMongoDatabase(env *Env) mongo.Client {
 	dbPass := env.DBPass
 
 	mongodbURI := fmt.Sprintf("mongodb://%s:%s@%s:%s", dbUser, dbPass, dbHost, dbPort)
+	log.Println(mongodbURI)
 
 	if dbUser == "" || dbPass == "" {
 		mongodbURI = fmt.Sprintf("mongodb://%s:%s", dbHost, dbPort)
@@ -39,6 +40,7 @@ func NewMongoDatabase(env *Env) mongo.Client {
 		log.Fatal(err)
 	}
 
+	log.Println("Success connection to MongoDB.")
 	return client
 }
 

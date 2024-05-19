@@ -3,8 +3,9 @@ package main
 import (
 	"time"
 
-	route "github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
+	route "go-gin-be-clean-arch/api/route"
+	"go-gin-be-clean-arch/bootstrap"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +16,14 @@ func main() {
 	env := app.Env
 
 	db := app.Mongo.Database(env.DBName)
-	defer app.CloseDBConnection()
+	cache := app.Redis
+	defer app.CloseAllConnection()
 
 	timeout := time.Duration(env.ContextTimeout) * time.Second
 
 	gin := gin.Default()
 
-	route.Setup(env, timeout, db, gin)
+	route.Setup(env, timeout, db, cache, gin)
 
 	gin.Run(env.ServerAddress)
 }
